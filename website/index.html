@@ -1,0 +1,106 @@
+﻿<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Pulse is a premium cross-platform local media player for Android, Windows, and Web." />
+    <meta name="theme-color" content="#101114" />
+    <meta property="og:title" content="Pulse Media Player" />
+    <meta property="og:description" content="A beautiful, fast, customizable media player for your local library." />
+    <meta property="og:image" content="assets/pulse-logo.png" />
+    <title>Pulse - Premium Media Player</title>
+    <link rel="icon" href="assets/pulse-logo.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Pulse home">
+        <img src="assets/pulse-logo.png" alt="" />
+        <span>Pulse</span>
+      </a>
+      <nav aria-label="Primary navigation">
+        <a href="#features">Features</a>
+        <a href="#preview">Preview</a>
+        <a href="#downloads">Download</a>
+        <a href="#docs">Docs</a>
+      </nav>
+      <button class="theme-toggle" type="button" aria-label="Toggle theme">
+        <span class="theme-icon" aria-hidden="true"></span>
+      </button>
+    </header>
+
+    <main id="top">
+      <section class="hero section-band">
+        <div class="hero-copy">
+          <p class="eyebrow">Local media, beautifully handled</p>
+          <h1>Pulse</h1>
+          <p class="hero-text">A premium media player for Android, Windows, and Web, designed for smooth playback, deep customization, and libraries that keep growing.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#downloads">Get Pulse</a>
+            <a class="button ghost" href="#preview">See Preview</a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-label="Pulse player preview">
+          <div class="player-shell">
+            <div class="artwork"><img src="assets/pulse-logo.png" alt="Pulse logo" /></div>
+            <div class="track-meta"><span>Now Playing</span><strong>Midnight Signal</strong></div>
+            <div class="progress" aria-hidden="true"><span></span></div>
+            <div class="controls" aria-hidden="true"><span></span><span class="play"></span><span></span></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="section">
+        <div class="section-heading"><p class="eyebrow">Built for serious libraries</p><h2>Fast, elegant, and ready for every screen.</h2></div>
+        <div class="feature-grid">
+          <article class="feature-card"><span class="feature-mark"></span><h3>Premium Playback</h3><p>Audio, video, subtitles, gestures, queue, resume, and mini player experiences designed to feel calm and immediate.</p></article>
+          <article class="feature-card"><span class="feature-mark"></span><h3>Adaptive Library</h3><p>Organize music, videos, albums, artists, genres, folders, favorites, history, and recent media at scale.</p></article>
+          <article class="feature-card"><span class="feature-mark"></span><h3>Theme Engine</h3><p>Light, Dark, AMOLED, Glass, Material Dynamic, Midnight, Forest, Purple, and Sunset with user-tuned motion.</p></article>
+          <article class="feature-card"><span class="feature-mark"></span><h3>Future Ready</h3><p>Clean architecture leaves room for AI search, smart summaries, cloud sync, plugins, streaming, and extensions.</p></article>
+        </div>
+      </section>
+
+      <section id="preview" class="section preview-section">
+        <div class="section-heading"><p class="eyebrow">Product direction</p><h2>A distinct identity, not another utility clone.</h2></div>
+        <div class="preview-layout">
+          <div class="phone-preview">
+            <div class="phone-top"></div>
+            <img src="assets/pulse-logo.png" alt="Pulse artwork preview" />
+            <div class="phone-copy"><span>Library</span><strong>Recently Added</strong></div>
+            <div class="list-row"></div><div class="list-row short"></div><div class="mini-player"></div>
+          </div>
+          <div class="desktop-preview">
+            <div class="window-bar"></div>
+            <div class="desktop-grid"><div class="sidebar"></div><div class="content"><div class="wide-card"></div><div class="tile-grid"><span></span><span></span><span></span><span></span></div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="downloads" class="section downloads">
+        <div class="section-heading"><p class="eyebrow">Distribution</p><h2>Release channels are ready for the app builds.</h2></div>
+        <div class="download-grid">
+          <a class="download-card disabled" aria-disabled="true"><span>Android</span><strong>APK</strong><small>Coming after MVP build</small></a>
+          <a class="download-card disabled" aria-disabled="true"><span>Windows</span><strong>Installer</strong><small>Coming after MVP build</small></a>
+          <a class="download-card disabled" aria-disabled="true"><span>Web</span><strong>Launch App</strong><small>Coming after web build</small></a>
+        </div>
+      </section>
+
+      <section id="docs" class="section split-section">
+        <div><p class="eyebrow">Documentation</p><h2>Clear public pages from day one.</h2></div>
+        <div class="link-list">
+          <a href="../docs/brand.md">Brand Guide</a><a href="../docs/changelog.md">Changelog</a><a href="../docs/release-strategy.md">Release Strategy</a><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms</a>
+        </div>
+      </section>
+
+      <section class="section faq">
+        <div class="section-heading"><p class="eyebrow">FAQ</p><h2>What Pulse is becoming.</h2></div>
+        <details open><summary>Which platforms will Pulse support?</summary><p>Android, Windows, and Web first. The architecture will keep macOS and Linux viable later.</p></details>
+        <details><summary>Will Pulse stream from cloud services?</summary><p>Not in the first release. The foundation will make cloud sync, accounts, plugins, and streaming possible later.</p></details>
+        <details><summary>Is Pulse open for testing yet?</summary><p>The distribution site is ready. App builds will appear here after the Flutter MVP reaches release quality.</p></details>
+      </section>
+    </main>
+
+    <footer class="site-footer"><div><strong>Pulse</strong><p>Premium local media player for Android, Windows, and Web.</p></div><div class="footer-links"><a href="mailto:hello@example.com">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></footer>
+    <script src="script.js"></script>
+  </body>
+</html>

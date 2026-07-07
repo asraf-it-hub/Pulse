@@ -1,0 +1,15 @@
+﻿.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+.idea/
+.vscode/
+*.iml
+*.log
+node_modules/
+dist/
+coverage/
+.pulse-git/
+gitmeta/
+website/probe.txt

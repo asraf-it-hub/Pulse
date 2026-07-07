@@ -1,0 +1,11 @@
+﻿{
+  "name": "pulse-foundation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build-website.mjs",
+    "test": "node scripts/verify-website.mjs",
+    "serve": "python -m http.server 4173 --directory website"
+  }
+}
