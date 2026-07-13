@@ -1,22 +1,17 @@
 ﻿# Pulse Flutter App
 
-The Flutter app will live here once the Flutter SDK is available in the development environment.
+Phase 2 starts here: a cross-platform Flutter media player for Android, Windows, and Web.
 
-Target platforms:
+## Local setup
 
-- Android
-- Windows
-- Web
+Install Flutter, then run:
 
-Do not enable iOS for the initial product.
+```bash
+cd app
+flutter pub get
+flutter create --platforms=android,windows,web .
+flutter test
+flutter run -d windows
+```
 
-Planned structure:
-
-- `lib/core`
-- `lib/features`
-- `lib/services`
-- `lib/theme`
-- `lib/player_engine`
-- `lib/media_scanner`
-- `lib/subtitle_engine`
-- `lib/settings_engine`
+The source already avoids iOS-specific assumptions. Platform folders are intentionally generated locally so Flutter can create the correct native files for the installed SDK version.
