@@ -1,4 +1,4 @@
-import 'package:flutter/foundation.dart';
+﻿import 'package:flutter/foundation.dart';
 
 import '../../core/models/media_item.dart';
 
@@ -27,5 +27,6 @@ abstract interface class PlayerEngine {
   Future<void> pause();
   Future<void> seek(Duration position);
   Future<void> setSpeed(double speed);
+  Future<void> setSubtitleTrack(SubtitleTrack? track);
   Future<void> dispose();
 }

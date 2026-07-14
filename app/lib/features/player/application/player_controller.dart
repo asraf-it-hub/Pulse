@@ -62,6 +62,8 @@ class PlayerController extends ChangeNotifier {
 
   Future<void> setSpeed(double speed) => _engine.setSpeed(speed);
 
+  Future<void> setSubtitleTrack(SubtitleTrack? track) => _engine.setSubtitleTrack(track);
+
   Future<void> next() async {
     final item = _nextItem();
     if (item != null) {
@@ -138,3 +140,4 @@ class PlayerController extends ChangeNotifier {
     super.dispose();
   }
 }
+

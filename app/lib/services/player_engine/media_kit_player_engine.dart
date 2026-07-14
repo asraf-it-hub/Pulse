@@ -1,7 +1,7 @@
-import 'dart:async';
+﻿import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:media_kit/media_kit.dart';
+import 'package:media_kit/media_kit.dart' as mk;
 
 import '../../core/models/media_item.dart';
 import 'player_engine.dart';
@@ -17,7 +17,7 @@ class MediaKitPlayerEngine implements PlayerEngine {
     ];
   }
 
-  final Player _player = Player();
+  final mk.Player _player = mk.Player();
   final ValueNotifier<PlaybackSnapshot> _snapshot = ValueNotifier(const PlaybackSnapshot());
   late final List<StreamSubscription<Object?>> _subscriptions;
 
@@ -28,8 +28,11 @@ class MediaKitPlayerEngine implements PlayerEngine {
   Object get platformPlayer => _player;
 
   @override
-  Future<void> open(MediaItem item, {bool play = true}) {
-    return _player.open(Media(item.uri), play: play);
+  Future<void> open(MediaItem item, {bool play = true}) async {
+    await _player.open(mk.Media(item.uri), play: play);
+    if (item.subtitleTracks.isNotEmpty) {
+      await setSubtitleTrack(item.subtitleTracks.first);
+    }
   }
 
   @override
@@ -43,6 +46,14 @@ class MediaKitPlayerEngine implements PlayerEngine {
 
   @override
   Future<void> setSpeed(double speed) => _player.setRate(speed);
+
+  @override
+  Future<void> setSubtitleTrack(SubtitleTrack? track) {
+    if (track == null) {
+      return _player.setSubtitleTrack(mk.SubtitleTrack.no());
+    }
+    return _player.setSubtitleTrack(mk.SubtitleTrack.uri(track.uri, title: track.label, language: track.language));
+  }
 
   void _update({
     Duration? position,

@@ -2,6 +2,7 @@
 
 import '../../../core/models/media_item.dart';
 import '../../../services/media_scanner/media_scanner.dart';
+import '../../../services/permissions/media_permission_service.dart';
 import '../data/media_library_store.dart';
 
 enum LibraryFilter { all, videos, music, favorites, recent }
@@ -12,11 +13,14 @@ class LibraryController extends ChangeNotifier {
   LibraryController({
     required MediaScanner scanner,
     MediaLibraryStore store = const MediaLibraryStore(),
+    MediaPermissionService permissionService = const PermissionHandlerMediaPermissionService(),
   })  : _scanner = scanner,
-        _store = store;
+        _store = store,
+        _permissionService = permissionService;
 
   final MediaScanner _scanner;
   final MediaLibraryStore _store;
+  final MediaPermissionService _permissionService;
 
   List<MediaItem> _items = [];
   LibraryFilter _filter = LibraryFilter.all;
@@ -75,33 +79,30 @@ class LibraryController extends ChangeNotifier {
     }
   }
 
-  Future<void> importFiles() async {
+  Future<void> importFiles() => _importWith(_scanner.pickFiles, label: 'import media files');
+
+  Future<void> importFolder() => _importWith(_scanner.pickFolder, label: 'scan folder');
+
+  Future<void> importPaths(List<String> paths) => _importWith(() => _scanner.fromPaths(paths), label: 'import dropped media');
+
+  Future<void> _importWith(Future<List<MediaItem>> Function() importAction, {required String label}) async {
     _loading = true;
     _error = null;
     notifyListeners();
     try {
-      final picked = await _scanner.pickFiles();
-      if (picked.isEmpty) {
-        _loading = false;
-        notifyListeners();
+      final allowed = await _permissionService.ensureMediaAccess();
+      if (!allowed) {
+        _error = 'Media permission is required to $label.';
         return;
       }
-
-      final merged = {for (final item in _items) item.id: item};
-      for (final item in picked) {
-        final existing = merged[item.id];
-        merged[item.id] = existing == null
-            ? item
-            : existing.copyWith(
-                title: item.title,
-                uri: item.uri,
-                kind: item.kind,
-              );
+      final picked = await importAction();
+      if (picked.isEmpty) {
+        return;
       }
-      _items = merged.values.toList(growable: false);
+      _mergeItems(picked);
       await _store.save(_items);
     } catch (error) {
-      _error = 'Could not import media files: $error';
+      _error = 'Could not $label: $error';
     } finally {
       _loading = false;
       notifyListeners();
@@ -133,6 +134,29 @@ class LibraryController extends ChangeNotifier {
     notifyListeners();
   }
 
+  void _mergeItems(List<MediaItem> incoming) {
+    final merged = {for (final item in _items) item.id: item};
+    for (final item in incoming) {
+      final existing = merged[item.id];
+      merged[item.id] = existing == null
+          ? item
+          : existing.copyWith(
+              title: item.title,
+              uri: item.uri,
+              kind: item.kind,
+              artist: item.artist,
+              album: item.album,
+              genre: item.genre,
+              duration: item.duration,
+              folderPath: item.folderPath,
+              artworkUri: item.artworkUri,
+              thumbnailUri: item.thumbnailUri,
+              subtitleTracks: item.subtitleTracks,
+            );
+    }
+    _items = merged.values.toList(growable: false);
+  }
+
   void _replace(MediaItem replacement) {
     _items = [
       for (final item in _items) item.id == replacement.id ? replacement : item,
@@ -140,3 +164,4 @@ class LibraryController extends ChangeNotifier {
     notifyListeners();
   }
 }
+

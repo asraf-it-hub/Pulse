@@ -4,6 +4,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:pulse/core/models/media_item.dart';
 import 'package:pulse/features/library/application/library_controller.dart';
 import 'package:pulse/services/media_scanner/media_scanner.dart';
+import 'package:pulse/services/permissions/media_permission_service.dart';
 
 void main() {
   setUp(() {
@@ -21,6 +22,7 @@ void main() {
           addedAt: DateTime.utc(2026, 7, 13),
         ),
       ]),
+      permissionService: const _AllowedPermissions(),
     );
     await controller.load();
 
@@ -32,7 +34,7 @@ void main() {
   });
 
   test('importFiles treats an empty picker result as cancel', () async {
-    final controller = LibraryController(scanner: const _FakeScanner([]));
+    final controller = LibraryController(scanner: const _FakeScanner([]), permissionService: const _AllowedPermissions());
     await controller.load();
 
     await controller.importFiles();
@@ -43,7 +45,7 @@ void main() {
   });
 
   test('importFiles exposes scanner errors for debugging', () async {
-    final controller = LibraryController(scanner: _ThrowingScanner());
+    final controller = LibraryController(scanner: _ThrowingScanner(), permissionService: const _AllowedPermissions());
     await controller.load();
 
     await controller.importFiles();
@@ -53,6 +55,13 @@ void main() {
   });
 }
 
+class _AllowedPermissions implements MediaPermissionService {
+  const _AllowedPermissions();
+
+  @override
+  Future<bool> ensureMediaAccess() async => true;
+}
+
 class _FakeScanner implements MediaScanner {
   const _FakeScanner(this.items);
 
@@ -60,6 +69,12 @@ class _FakeScanner implements MediaScanner {
 
   @override
   Future<List<MediaItem>> pickFiles() async => items;
+
+  @override
+  Future<List<MediaItem>> pickFolder() async => items;
+
+  @override
+  Future<List<MediaItem>> fromPaths(List<String> paths) async => items;
 }
 
 class _ThrowingScanner implements MediaScanner {
@@ -67,5 +82,14 @@ class _ThrowingScanner implements MediaScanner {
   Future<List<MediaItem>> pickFiles() async {
     throw StateError('picker unavailable');
   }
-}
 
+  @override
+  Future<List<MediaItem>> pickFolder() async {
+    throw StateError('picker unavailable');
+  }
+
+  @override
+  Future<List<MediaItem>> fromPaths(List<String> paths) async {
+    throw StateError('picker unavailable');
+  }
+}

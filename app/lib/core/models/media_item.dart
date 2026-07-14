@@ -1,4 +1,22 @@
-﻿enum MediaKind { audio, video }
+﻿class SubtitleTrack {
+  const SubtitleTrack({required this.label, required this.uri, this.language});
+
+  final String label;
+  final String uri;
+  final String? language;
+
+  Map<String, Object?> toJson() => {'label': label, 'uri': uri, 'language': language};
+
+  factory SubtitleTrack.fromJson(Map<String, Object?> json) {
+    return SubtitleTrack(
+      label: json['label'] as String,
+      uri: json['uri'] as String,
+      language: json['language'] as String?,
+    );
+  }
+}
+
+enum MediaKind { audio, video }
 
 class MediaItem {
   const MediaItem({
@@ -12,6 +30,10 @@ class MediaItem {
     this.duration,
     this.addedAt,
     this.lastPlayedAt,
+    this.folderPath,
+    this.artworkUri,
+    this.thumbnailUri,
+    this.subtitleTracks = const [],
     this.isFavorite = false,
     this.resumePosition = Duration.zero,
   });
@@ -26,6 +48,10 @@ class MediaItem {
   final Duration? duration;
   final DateTime? addedAt;
   final DateTime? lastPlayedAt;
+  final String? folderPath;
+  final String? artworkUri;
+  final String? thumbnailUri;
+  final List<SubtitleTrack> subtitleTracks;
   final bool isFavorite;
   final Duration resumePosition;
 
@@ -42,6 +68,10 @@ class MediaItem {
     Duration? duration,
     DateTime? addedAt,
     DateTime? lastPlayedAt,
+    String? folderPath,
+    String? artworkUri,
+    String? thumbnailUri,
+    List<SubtitleTrack>? subtitleTracks,
     bool? isFavorite,
     Duration? resumePosition,
   }) {
@@ -56,6 +86,10 @@ class MediaItem {
       duration: duration ?? this.duration,
       addedAt: addedAt ?? this.addedAt,
       lastPlayedAt: lastPlayedAt ?? this.lastPlayedAt,
+      folderPath: folderPath ?? this.folderPath,
+      artworkUri: artworkUri ?? this.artworkUri,
+      thumbnailUri: thumbnailUri ?? this.thumbnailUri,
+      subtitleTracks: subtitleTracks ?? this.subtitleTracks,
       isFavorite: isFavorite ?? this.isFavorite,
       resumePosition: resumePosition ?? this.resumePosition,
     );
@@ -72,6 +106,10 @@ class MediaItem {
         'durationMs': duration?.inMilliseconds,
         'addedAt': addedAt?.toIso8601String(),
         'lastPlayedAt': lastPlayedAt?.toIso8601String(),
+        'folderPath': folderPath,
+        'artworkUri': artworkUri,
+        'thumbnailUri': thumbnailUri,
+        'subtitleTracks': subtitleTracks.map((track) => track.toJson()).toList(growable: false),
         'isFavorite': isFavorite,
         'resumePositionMs': resumePosition.inMilliseconds,
       };
@@ -88,6 +126,13 @@ class MediaItem {
       duration: json['durationMs'] == null ? null : Duration(milliseconds: json['durationMs'] as int),
       addedAt: json['addedAt'] == null ? null : DateTime.parse(json['addedAt'] as String),
       lastPlayedAt: json['lastPlayedAt'] == null ? null : DateTime.parse(json['lastPlayedAt'] as String),
+      folderPath: json['folderPath'] as String?,
+      artworkUri: json['artworkUri'] as String?,
+      thumbnailUri: json['thumbnailUri'] as String?,
+      subtitleTracks: (json['subtitleTracks'] as List<Object?>? ?? const [])
+          .whereType<Map<String, Object?>>()
+          .map(SubtitleTrack.fromJson)
+          .toList(growable: false),
       isFavorite: json['isFavorite'] as bool? ?? false,
       resumePosition: Duration(milliseconds: json['resumePositionMs'] as int? ?? 0),
     );
