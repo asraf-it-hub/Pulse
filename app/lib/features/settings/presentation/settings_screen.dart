@@ -78,7 +78,18 @@ class SettingsScreen extends StatelessWidget {
                       spacing: 12,
                       runSpacing: 12,
                       children: [
-                        for (final color in const [Color(0xffff6b3d), Color(0xff55d6be), Color(0xff7c5cff), Color(0xff2f8f5b), Color(0xffffb84d)])
+                        for (final color in const [
+                          Color(0xffff6b3d), // Neon Orange
+                          Color(0xff55d6be), // Teal
+                          Color(0xff7c5cff), // Electric Indigo
+                          Color(0xff2f8f5b), // Emerald
+                          Color(0xffffb84d), // Amber Gold
+                          Color(0xffe91e63), // Pink Neon
+                          Color(0xff00bcd4), // Cyan
+                          Color(0xff8bc34a), // Lime Green
+                          Color(0xffff5722), // Deep Orange
+                          Color(0xff673ab7), // Deep Purple
+                        ])
                           InkWell(
                             borderRadius: BorderRadius.circular(999),
                             onTap: () => settingsController.update(settings.copyWith(accentColor: color)),

@@ -129,6 +129,15 @@ class LibraryController extends ChangeNotifier {
     _scheduleLibrarySave();
   }
 
+  Future<void> updateItem(MediaItem updatedItem) async {
+    final index = _items.indexWhere((i) => i.id == updatedItem.id);
+    if (index != -1) {
+      _items = List.from(_items)..[index] = updatedItem;
+      notifyListeners();
+      await _store.save(_items);
+    }
+  }
+
   Future<void> toggleFavorite(MediaItem item) async {
     _replace(item.copyWith(isFavorite: !item.isFavorite));
     _saveDebouncer?.cancel();

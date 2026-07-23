@@ -1,6 +1,5 @@
 import 'dart:io' as io;
 import 'dart:ui';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:media_kit_video/media_kit_video.dart';
@@ -11,11 +10,13 @@ import 'play_pause_morph_button.dart';
 
 import '../../../core/models/media_item.dart';
 import '../../../core/widgets/pulse_empty_state.dart';
-import '../../../core/widgets/animated_audio_visualizer.dart';
+import '../../../core/widgets/pulse_organic_visualizer.dart';
 import '../../../services/player_engine/player_engine.dart';
 import '../../library/application/library_controller.dart';
+import '../../library/presentation/tag_editor_sheet.dart';
 import '../../settings/application/settings_controller.dart';
 import '../application/player_controller.dart';
+import 'ab_looper_widget.dart';
 import 'equalizer_sheet.dart';
 
 class NowPlayingScreen extends StatelessWidget {
@@ -79,6 +80,7 @@ class NowPlayingScreen extends StatelessWidget {
                           item: current,
                           snapshot: snapshot,
                           playerController: playerController,
+                          libraryController: libraryController,
                           onFavorite: () => libraryController.toggleFavorite(current),
                         );
                         if (wide) {
@@ -241,47 +243,14 @@ class _ArtworkPanelState extends State<_ArtworkPanel> {
   }
 
   Widget _buildAudioArt(ThemeData theme) {
-    Widget artwork = Center(child: Image.asset('assets/brand/pulse-logo.png', width: 220, height: 220, fit: BoxFit.contain));
-
-    if (!kIsWeb && widget.item.thumbnailUri != null && widget.item.thumbnailUri!.isNotEmpty) {
-      final file = io.File(widget.item.thumbnailUri!);
-      try {
-        if (file.existsSync()) {
-          artwork = Image.file(file, fit: BoxFit.cover);
-        }
-      } catch (_) {}
-    }
-
-    return Stack(
-      fit: StackFit.expand,
-      children: [
-        artwork,
-        Positioned(
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 64,
-          child: AnimatedAudioVisualizer(
-            isPlaying: widget.playerController.snapshot.value.playing,
-            color: theme.colorScheme.primary,
-          ),
-        ),
-        Align(
-          alignment: Alignment.bottomLeft,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: ClipOval(
-              child: ColoredBox(
-                color: Colors.black45,
-                child: Padding(
-                  padding: const EdgeInsets.all(10),
-                  child: Icon(Icons.music_note_rounded, color: theme.colorScheme.primary, size: 28),
-                ),
-              ),
-            ),
-          ),
-        ),
-      ],
+    return Container(
+      color: theme.colorScheme.surfaceContainerHighest.withValues(alpha: 0.2),
+      child: PulseOrganicVisualizer(
+        isPlaying: widget.playerController.snapshot.value.playing,
+        item: widget.item,
+        accentColor: theme.colorScheme.primary,
+        size: 320.0,
+      ),
     );
   }
 
@@ -447,6 +416,7 @@ class ControlsPanel extends StatelessWidget {
     required this.item,
     required this.snapshot,
     required this.playerController,
+    required this.libraryController,
     required this.onFavorite,
     super.key,
   });
@@ -454,6 +424,7 @@ class ControlsPanel extends StatelessWidget {
   final MediaItem item;
   final PlaybackSnapshot snapshot;
   final PlayerController playerController;
+  final LibraryController libraryController;
   final VoidCallback onFavorite;
 
   @override
@@ -533,7 +504,7 @@ class ControlsPanel extends StatelessWidget {
                       shape: const RoundedRectangleBorder(
                         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                       ),
-                      builder: (context) => const EqualizerSheet(),
+                      builder: (context) => EqualizerSheet(playerController: playerController),
                     );
                   },
                 ),
@@ -548,33 +519,61 @@ class ControlsPanel extends StatelessWidget {
                       ),
                       builder: (context) {
                         return Container(
-                          height: 340,
+                          height: 380,
                           padding: const EdgeInsets.all(20),
                           child: Column(
                             children: [
                               Text(
-                                'Live Audio Spectrum Visualizer',
+                                'Pulse Signature Audio Visualizer',
                                 style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
                               ),
-                              const SizedBox(height: 16),
+                              const SizedBox(height: 12),
                               Expanded(
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: Container(
-                                    color: Colors.black87,
-                                    padding: const EdgeInsets.all(20),
-                                    child: AnimatedAudioVisualizer(
-                                      isPlaying: snapshot.playing,
-                                      color: Theme.of(context).colorScheme.primary,
-                                      barCount: 36,
-                                    ),
-                                  ),
+                                child: PulseOrganicVisualizer(
+                                  isPlaying: snapshot.playing,
+                                  item: item,
+                                  accentColor: Theme.of(context).colorScheme.primary,
+                                  size: 280,
                                 ),
                               ),
                             ],
                           ),
                         );
                       },
+                    );
+                  },
+                ),
+                ActionChip(
+                  avatar: const Icon(Icons.repeat_rounded),
+                  label: const Text('A-B Loop (🔁)'),
+                  onPressed: () {
+                    showModalBottomSheet<void>(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                      ),
+                      builder: (context) => ABLooperWidget(
+                        currentPosition: snapshot.position,
+                        duration: snapshot.duration,
+                        onSeek: playerController.seekTo,
+                      ),
+                    );
+                  },
+                ),
+                ActionChip(
+                  avatar: const Icon(Icons.edit_note_rounded),
+                  label: const Text('Edit Tags (🏷️)'),
+                  onPressed: () {
+                    showModalBottomSheet<void>(
+                      context: context,
+                      isScrollControlled: true,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                      ),
+                      builder: (context) => TagEditorSheet(
+                        item: item,
+                        libraryController: libraryController,
+                      ),
                     );
                   },
                 ),

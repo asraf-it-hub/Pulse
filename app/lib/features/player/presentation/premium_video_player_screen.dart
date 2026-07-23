@@ -12,6 +12,7 @@ import '../../../services/player_engine/player_engine.dart';
 import '../../library/application/library_controller.dart';
 import '../../settings/application/settings_controller.dart';
 import '../application/player_controller.dart';
+import 'ab_looper_widget.dart';
 import 'play_pause_morph_button.dart';
 import 'player_hud_overlay.dart';
 import 'player_intents.dart';
@@ -328,7 +329,7 @@ class _PremiumVideoPlayerScreenState extends State<PremiumVideoPlayerScreen> wit
                                     });
                                     _hudKey.currentState?.showBrightness(target);
                                   } else {
-                                    _volumeValue = (_volumeValue + delta).clamp(0.0, 1.0);
+                                    _volumeValue = (_volumeValue + delta * 1.5).clamp(0.0, 2.0);
                                     widget.playerController.setVolume(_volumeValue);
                                     _hudKey.currentState?.showVolume();
                                   }
@@ -927,6 +928,24 @@ class _PremiumVideoPlayerScreenState extends State<PremiumVideoPlayerScreen> wit
                     onTap: () {
                       Navigator.pop(context);
                       widget.playerController.startSleepTimer(const Duration(minutes: 30));
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.repeat_rounded, color: Colors.white70),
+                    title: const Text('A-B Segment Looper (🔁)', style: TextStyle(color: Colors.white70)),
+                    onTap: () {
+                      Navigator.pop(context);
+                      showModalBottomSheet<void>(
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+                        ),
+                        builder: (context) => ABLooperWidget(
+                          currentPosition: widget.playerController.snapshot.value.position,
+                          duration: widget.playerController.snapshot.value.duration,
+                          onSeek: widget.playerController.seekTo,
+                        ),
+                      );
                     },
                   ),
                   ListTile(

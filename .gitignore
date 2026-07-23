@@ -1,4 +1,4 @@
-﻿.dart_tool/
+.dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
 .packages
@@ -13,3 +13,5 @@ coverage/
 .pulse-git/
 gitmeta/
 website/probe.txt
+website/assets/*.apk
+website/assets/*.zip

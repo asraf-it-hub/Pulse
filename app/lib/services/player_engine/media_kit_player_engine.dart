@@ -165,6 +165,18 @@ class MediaKitPlayerEngine implements PlayerEngine {
   }
 
   @override
+  Future<void> setEqualizer(List<double> gains, double preamp) async {
+    try {
+      final avgGain = gains.isEmpty ? 0.0 : gains.reduce((a, b) => a + b) / gains.length;
+      final boost = (1.0 + (preamp / 12.0) + (avgGain / 24.0)).clamp(0.2, 3.0);
+      final baseVol = _snapshot.value.volume;
+      await _player.setVolume((baseVol * boost * 100.0).clamp(0.0, 200.0));
+    } catch (e) {
+      debugPrint('Equalizer error: $e');
+    }
+  }
+
+  @override
   Future<void> dispose() async {
     for (final subscription in _subscriptions) {
       await subscription.cancel();

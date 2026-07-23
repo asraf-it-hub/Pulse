@@ -83,6 +83,22 @@ class PlayerController extends ChangeNotifier {
   BoxFit _videoFit = BoxFit.contain;
   double? _videoAspectRatio;
 
+  List<double> _equalizerGains = List.filled(10, 0.0);
+  double _equalizerPreamp = 0.0;
+  String _equalizerPreset = 'Flat';
+
+  List<double> get equalizerGains => List.unmodifiable(_equalizerGains);
+  double get equalizerPreamp => _equalizerPreamp;
+  String get equalizerPreset => _equalizerPreset;
+
+  void setEqualizer(String preset, List<double> gains, double preamp) {
+    _equalizerPreset = preset;
+    _equalizerGains = List.from(gains);
+    _equalizerPreamp = preamp;
+    _engine.setEqualizer(gains, preamp);
+    notifyListeners();
+  }
+
   BoxFit get videoFit => _videoFit;
   double? get videoAspectRatio => _videoAspectRatio;
 
@@ -310,15 +326,41 @@ class PlayerController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Timer? _fadeTimer;
+
   void startSleepTimer(Duration duration) {
     _sleepTimer?.cancel();
-    _sleepTimer = Timer(duration, _engine.pause);
+    _fadeTimer?.cancel();
+
+    final fadeStart = duration - const Duration(seconds: 30);
+    if (fadeStart > Duration.zero) {
+      _fadeTimer = Timer(fadeStart, () {
+        final startVol = _engine.snapshot.value.volume;
+        var step = 0;
+        Timer.periodic(const Duration(seconds: 1), (timer) {
+          step++;
+          final currentVol = (startVol * (1.0 - (step / 30))).clamp(0.0, 1.0);
+          _engine.setVolume(currentVol);
+          if (step >= 30) timer.cancel();
+        });
+      });
+    }
+
+    _sleepTimer = Timer(duration, () {
+      _engine.pause();
+      showToast('Sleep timer finished');
+    });
     notifyListeners();
+    showToast('Sleep timer set for ${duration.inMinutes}m');
   }
 
   void cancelSleepTimer() {
     _sleepTimer?.cancel();
+    _fadeTimer?.cancel();
+    _sleepTimer = null;
+    _fadeTimer = null;
     notifyListeners();
+    showToast('Sleep timer cancelled');
   }
 
   MediaItem? _nextItem() {

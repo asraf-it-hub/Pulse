@@ -41,5 +41,6 @@ abstract interface class PlayerEngine {
   Future<void> setVolume(double volume);
   Future<void> setSubtitleTrack(SubtitleTrack? track);
   Future<void> setAudioTrack(AudioTrack? track);
+  Future<void> setEqualizer(List<double> gains, double preamp);
   Future<void> dispose();
 }

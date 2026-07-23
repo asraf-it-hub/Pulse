@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import '../application/player_controller.dart';
 
 class EqualizerSheet extends StatefulWidget {
-  const EqualizerSheet({super.key});
+  const EqualizerSheet({this.playerController, super.key});
+
+  final PlayerController? playerController;
 
   @override
   State<EqualizerSheet> createState() => _EqualizerSheetState();
@@ -9,10 +12,11 @@ class EqualizerSheet extends StatefulWidget {
 
 class _EqualizerSheetState extends State<EqualizerSheet> {
   bool _enabled = true;
-  String _selectedPreset = 'Flat';
+  late String _selectedPreset;
+  late double _preamp;
+  late List<double> _gains;
 
   final List<String> _frequencies = ['60Hz', '170Hz', '310Hz', '600Hz', '1kHz', '3kHz', '6kHz', '12kHz', '14kHz', '16kHz'];
-  final List<double> _gains = List.filled(10, 0.0);
 
   final Map<String, List<double>> _presets = {
     'Flat': [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -25,6 +29,25 @@ class _EqualizerSheetState extends State<EqualizerSheet> {
     'Classical': [4, 3, 2, 2, -1, -1, 0, 2, 3, 4],
   };
 
+  @override
+  void initState() {
+    super.initState();
+    final pc = widget.playerController;
+    if (pc != null) {
+      _selectedPreset = pc.equalizerPreset;
+      _preamp = pc.equalizerPreamp;
+      _gains = List.from(pc.equalizerGains);
+    } else {
+      _selectedPreset = 'Flat';
+      _preamp = 0.0;
+      _gains = List.filled(10, 0.0);
+    }
+  }
+
+  void _updateEngine() {
+    widget.playerController?.setEqualizer(_selectedPreset, _gains, _preamp);
+  }
+
   void _applyPreset(String preset) {
     if (_presets.containsKey(preset)) {
       setState(() {
@@ -34,6 +57,7 @@ class _EqualizerSheetState extends State<EqualizerSheet> {
           _gains[i] = list[i];
         }
       });
+      _updateEngine();
     }
   }
 
@@ -91,7 +115,32 @@ class _EqualizerSheetState extends State<EqualizerSheet> {
               }).toList(),
             ),
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: 14),
+          Row(
+            children: [
+              const Icon(Icons.volume_up_rounded, size: 18),
+              const SizedBox(width: 8),
+              Text(
+                'Pre-Amp Booster: +${_preamp.round()}dB',
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
+              ),
+              Expanded(
+                child: Slider(
+                  value: _preamp,
+                  min: 0,
+                  max: 12,
+                  divisions: 12,
+                  onChanged: _enabled
+                      ? (v) {
+                          setState(() => _preamp = v);
+                          _updateEngine();
+                        }
+                      : null,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 10),
           Expanded(
             child: Opacity(
               opacity: _enabled ? 1.0 : 0.4,
@@ -125,6 +174,7 @@ class _EqualizerSheetState extends State<EqualizerSheet> {
                                     _gains[index] = val;
                                     _selectedPreset = 'Custom';
                                   });
+                                  _updateEngine();
                                 },
                               ),
                             ),

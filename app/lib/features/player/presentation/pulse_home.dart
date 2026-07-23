@@ -16,6 +16,7 @@ import 'play_pause_morph_button.dart';
 
 import '../../library/application/library_controller.dart';
 import '../../library/presentation/library_screen.dart';
+import '../../radio/presentation/radio_screen.dart';
 import '../../settings/application/settings_controller.dart';
 import '../../settings/presentation/settings_screen.dart';
 import '../application/player_controller.dart';
@@ -246,9 +247,10 @@ class _PulseHomeState extends State<PulseHome> with SingleTickerProviderStateMix
     final destinations = [
       const NavigationDestination(icon: Icon(Icons.movie_outlined), selectedIcon: Icon(Icons.movie_rounded), label: 'Video'),
       const NavigationDestination(icon: Icon(Icons.music_note_outlined), selectedIcon: Icon(Icons.music_note_rounded), label: 'Music'),
-      const NavigationDestination(icon: Icon(Icons.play_circle_outline_rounded), selectedIcon: Icon(Icons.play_circle_fill_rounded), label: 'Now Playing'),
+      const NavigationDestination(icon: Icon(Icons.play_circle_outline_rounded), selectedIcon: Icon(Icons.play_circle_fill_rounded), label: 'Player'),
       const NavigationDestination(icon: Icon(Icons.playlist_play_rounded), selectedIcon: Icon(Icons.playlist_play_rounded), label: 'Playlists'),
       const NavigationDestination(icon: Icon(Icons.folder_open_rounded), selectedIcon: Icon(Icons.folder_rounded), label: 'Folders'),
+      const NavigationDestination(icon: Icon(Icons.radio_outlined), selectedIcon: Icon(Icons.radio_rounded), label: 'Radio'),
       const NavigationDestination(icon: Icon(Icons.tune_outlined), selectedIcon: Icon(Icons.tune_rounded), label: 'Settings'),
     ];
 
@@ -282,6 +284,7 @@ class _PulseHomeState extends State<PulseHome> with SingleTickerProviderStateMix
         settingsController: widget.settingsController,
         defaultTab: 3,
       ),
+      RadioScreen(playerController: widget.playerController),
       SettingsScreen(settingsController: widget.settingsController),
     ];
 
@@ -369,9 +372,10 @@ class _PulseHomeState extends State<PulseHome> with SingleTickerProviderStateMix
                         destinations: const [
                           NavigationRailDestination(icon: Icon(Icons.movie_outlined), selectedIcon: Icon(Icons.movie_rounded), label: Text('Video')),
                           NavigationRailDestination(icon: Icon(Icons.music_note_outlined), selectedIcon: Icon(Icons.music_note_rounded), label: Text('Music')),
-                          NavigationRailDestination(icon: Icon(Icons.play_circle_outline_rounded), selectedIcon: Icon(Icons.play_circle_fill_rounded), label: Text('Now Playing')),
+                          NavigationRailDestination(icon: Icon(Icons.play_circle_outline_rounded), selectedIcon: Icon(Icons.play_circle_fill_rounded), label: Text('Player')),
                           NavigationRailDestination(icon: Icon(Icons.playlist_play_rounded), selectedIcon: Icon(Icons.playlist_play_rounded), label: Text('Playlists')),
                           NavigationRailDestination(icon: Icon(Icons.folder_open_rounded), selectedIcon: Icon(Icons.folder_rounded), label: Text('Folders')),
+                          NavigationRailDestination(icon: Icon(Icons.radio_outlined), selectedIcon: Icon(Icons.radio_rounded), label: Text('Radio')),
                           NavigationRailDestination(icon: Icon(Icons.tune_outlined), selectedIcon: Icon(Icons.tune_rounded), label: Text('Settings')),
                         ],
                       ),
@@ -501,7 +505,7 @@ class _PulseHomeState extends State<PulseHome> with SingleTickerProviderStateMix
                                                             shape: const RoundedRectangleBorder(
                                                               borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
                                                             ),
-                                                            builder: (context) => const EqualizerSheet(),
+                                                            builder: (context) => EqualizerSheet(playerController: widget.playerController),
                                                           );
                                                         },
                                                         icon: const Icon(Icons.tune_rounded, size: 18),

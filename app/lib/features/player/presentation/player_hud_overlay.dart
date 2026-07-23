@@ -259,95 +259,165 @@ class PlayerHudOverlayState extends State<PlayerHudOverlay> with TickerProviderS
             ),
           ),
 
-        // 3. Volume Glass vertical pill
-        Align(
-          alignment: const Alignment(0.85, 0.0),
-          child: IgnorePointer(
-            child: AnimatedOpacity(
-              opacity: _volumeOpacity,
-              duration: Duration(milliseconds: _volumeOpacity == 0.0 ? 250 : 120),
-              child: AnimatedScale(
-                scale: _volumeScale,
-                duration: const Duration(milliseconds: 120),
-                curve: Curves.easeOutCubic,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(999),
-                  child: BackdropFilter(
-                    filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
-                    child: Container(
-                      width: 50,
-                      height: 200,
-                      decoration: BoxDecoration(
-                        color: Colors.black38,
-                        borderRadius: BorderRadius.circular(999),
-                        border: Border.all(color: Colors.white12),
+        // 3. Volume Glass vertical pill & Supercharged 200% Boost Effect
+        Builder(
+          builder: (context) {
+            final isBoosted = volume > 1.0;
+            final fillRatio = (volume / 2.0).clamp(0.0, 1.0);
+
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                // Satisfying Fiery Right Screen Edge Flare when > 100%
+                if (isBoosted && _volumeOpacity > 0.0)
+                  Positioned(
+                    right: 0,
+                    top: 0,
+                    bottom: 0,
+                    width: 160,
+                    child: IgnorePointer(
+                      child: AnimatedOpacity(
+                        opacity: (_volumeOpacity * ((volume - 1.0) / 1.0)).clamp(0.0, 0.6),
+                        duration: const Duration(milliseconds: 100),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.centerRight,
+                              end: Alignment.centerLeft,
+                              colors: [
+                                Colors.deepOrangeAccent.withValues(alpha: 0.6),
+                                Colors.amberAccent.withValues(alpha: 0.2),
+                                Colors.transparent,
+                              ],
+                            ),
+                          ),
+                        ),
                       ),
-                      padding: const EdgeInsets.symmetric(vertical: 16),
-                      child: Column(
-                        children: [
-                           AnimatedScale(
-                             scale: 1.0 + (volume * 0.25),
-                             duration: const Duration(milliseconds: 80),
-                             curve: Curves.easeOutBack,
-                             child: Icon(
-                               volume == 0.0
-                                   ? Icons.volume_mute_rounded
-                                   : volume < 0.3
-                                       ? Icons.volume_down_rounded
-                                       : Icons.volume_up_rounded,
-                               color: Colors.white,
-                               size: 20,
-                             ),
-                           ),
-                           const SizedBox(height: 12),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 18),
-                              child: Container(
-                                width: 5,
-                                decoration: BoxDecoration(
-                                  color: Colors.white24,
-                                  borderRadius: BorderRadius.circular(999),
+                    ),
+                  ),
+
+                Align(
+                  alignment: const Alignment(0.85, 0.0),
+                  child: IgnorePointer(
+                    child: AnimatedOpacity(
+                      opacity: _volumeOpacity,
+                      duration: Duration(milliseconds: _volumeOpacity == 0.0 ? 250 : 120),
+                      child: AnimatedScale(
+                        scale: _volumeScale * (isBoosted ? 1.08 : 1.0),
+                        duration: const Duration(milliseconds: 120),
+                        curve: Curves.easeOutCubic,
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(999),
+                          child: BackdropFilter(
+                            filter: ImageFilter.blur(sigmaX: 12, sigmaY: 12),
+                            child: Container(
+                              width: isBoosted ? 56 : 50,
+                              height: isBoosted ? 230 : 200,
+                              decoration: BoxDecoration(
+                                color: isBoosted ? Colors.black87 : Colors.black38,
+                                borderRadius: BorderRadius.circular(999),
+                                border: Border.all(
+                                  color: isBoosted ? Colors.amberAccent : Colors.white12,
+                                  width: isBoosted ? 2.0 : 1.0,
                                 ),
-                                child: LayoutBuilder(
-                                  builder: (context, constraints) {
-                                    return Stack(
-                                      alignment: Alignment.bottomCenter,
-                                      children: [
-                                        AnimatedContainer(
-                                          duration: const Duration(milliseconds: 80),
-                                          curve: Curves.easeOutCubic,
-                                          height: constraints.maxHeight * volume,
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                            color: theme.colorScheme.primary,
-                                            borderRadius: BorderRadius.circular(999),
-                                          ),
+                                boxShadow: isBoosted
+                                    ? [
+                                        BoxShadow(
+                                          color: Colors.deepOrangeAccent.withValues(alpha: 0.8),
+                                          blurRadius: 24,
+                                          spreadRadius: 6,
                                         ),
-                                      ],
-                                    );
-                                  },
-                                ),
+                                        BoxShadow(
+                                          color: Colors.amberAccent.withValues(alpha: 0.6),
+                                          blurRadius: 36,
+                                          spreadRadius: 10,
+                                        ),
+                                      ]
+                                    : null,
+                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 16),
+                              child: Column(
+                                children: [
+                                  AnimatedScale(
+                                    scale: 1.0 + (volume * 0.25),
+                                    duration: const Duration(milliseconds: 80),
+                                    curve: Curves.easeOutBack,
+                                    child: Icon(
+                                      isBoosted
+                                          ? Icons.local_fire_department_rounded
+                                          : volume == 0.0
+                                              ? Icons.volume_mute_rounded
+                                              : volume < 0.3
+                                                  ? Icons.volume_down_rounded
+                                                  : Icons.volume_up_rounded,
+                                      color: isBoosted ? Colors.amberAccent : Colors.white,
+                                      size: isBoosted ? 24 : 20,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Expanded(
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(horizontal: 18),
+                                      child: Container(
+                                        width: isBoosted ? 7 : 5,
+                                        decoration: BoxDecoration(
+                                          color: Colors.white24,
+                                          borderRadius: BorderRadius.circular(999),
+                                        ),
+                                        child: LayoutBuilder(
+                                          builder: (context, constraints) {
+                                            return Stack(
+                                              alignment: Alignment.bottomCenter,
+                                              children: [
+                                                AnimatedContainer(
+                                                  duration: const Duration(milliseconds: 80),
+                                                  curve: Curves.easeOutCubic,
+                                                  height: constraints.maxHeight * fillRatio,
+                                                  width: double.infinity,
+                                                  decoration: BoxDecoration(
+                                                    gradient: isBoosted
+                                                        ? const LinearGradient(
+                                                            begin: Alignment.bottomCenter,
+                                                            end: Alignment.topCenter,
+                                                            colors: [
+                                                              Colors.amber,
+                                                              Colors.deepOrangeAccent,
+                                                              Colors.redAccent,
+                                                            ],
+                                                          )
+                                                        : null,
+                                                    color: isBoosted ? null : theme.colorScheme.primary,
+                                                    borderRadius: BorderRadius.circular(999),
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    isBoosted ? '🔥 ${(volume * 100).round()}%' : '${(volume * 100).round()}%',
+                                    style: TextStyle(
+                                      color: isBoosted ? Colors.amberAccent : Colors.white,
+                                      fontSize: isBoosted ? 11 : 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
-                          const SizedBox(height: 12),
-                          Text(
-                            '${(volume * 100).round()}%',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ),
-          ),
+              ],
+            );
+          },
         ),
 
         // 4. Brightness Apple-like Glowing Sun HUD
