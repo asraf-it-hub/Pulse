@@ -1,4 +1,4 @@
-﻿class SubtitleTrack {
+class SubtitleTrack {
   const SubtitleTrack({required this.label, required this.uri, this.language});
 
   final String label;
@@ -14,6 +14,40 @@
       language: json['language'] as String?,
     );
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SubtitleTrack && runtimeType == other.runtimeType && uri == other.uri;
+
+  @override
+  int get hashCode => uri.hashCode;
+}
+
+class AudioTrack {
+  const AudioTrack({required this.label, required this.id, this.language});
+
+  final String label;
+  final String id;
+  final String? language;
+
+  Map<String, Object?> toJson() => {'label': label, 'id': id, 'language': language};
+
+  factory AudioTrack.fromJson(Map<String, Object?> json) {
+    return AudioTrack(
+      label: json['label'] as String,
+      id: json['id'] as String,
+      language: json['language'] as String?,
+    );
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AudioTrack && runtimeType == other.runtimeType && id == other.id;
+
+  @override
+  int get hashCode => id.hashCode;
 }
 
 enum MediaKind { audio, video }
@@ -135,6 +169,39 @@ class MediaItem {
           .toList(growable: false),
       isFavorite: json['isFavorite'] as bool? ?? false,
       resumePosition: Duration(milliseconds: json['resumePositionMs'] as int? ?? 0),
+    );
+  }
+}
+
+class Playlist {
+  Playlist({required this.id, required this.name, required this.itemIds});
+
+  final String id;
+  final String name;
+  final List<String> itemIds;
+
+  Playlist copyWith({
+    String? name,
+    List<String>? itemIds,
+  }) {
+    return Playlist(
+      id: id,
+      name: name ?? this.name,
+      itemIds: itemIds ?? this.itemIds,
+    );
+  }
+
+  Map<String, Object?> toJson() => {
+        'id': id,
+        'name': name,
+        'itemIds': itemIds,
+      };
+
+  factory Playlist.fromJson(Map<String, Object?> json) {
+    return Playlist(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      itemIds: List<String>.from(json['itemIds'] as List),
     );
   }
 }

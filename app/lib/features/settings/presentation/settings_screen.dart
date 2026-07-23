@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 
 import '../../../core/theme/pulse_theme.dart';
 import '../application/settings_controller.dart';
@@ -17,7 +17,7 @@ class SettingsScreen extends StatelessWidget {
         return ListView(
           padding: const EdgeInsets.fromLTRB(20, 20, 20, 120),
           children: [
-            Text('Settings', style: Theme.of(context).textTheme.displaySmall),
+            Text('Settings', style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.bold)),
             const SizedBox(height: 20),
             Card(
               child: Padding(
@@ -25,7 +25,7 @@ class SettingsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Theme preset', style: Theme.of(context).textTheme.titleLarge),
+                    Text('Theme preset', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 14),
                     Wrap(
                       spacing: 10,
@@ -50,7 +50,7 @@ class SettingsScreen extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text('Personalization', style: Theme.of(context).textTheme.titleLarge),
+                    Text('Personalization', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
                     const SizedBox(height: 20),
                     _SliderSetting(
                       label: 'Corner radius',
@@ -88,6 +88,33 @@ class SettingsScreen extends StatelessWidget {
                             ),
                           ),
                       ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 14),
+            Card(
+              child: Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text('Playback & Controls', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold)),
+                    const SizedBox(height: 20),
+                    _SliderSetting(
+                      label: 'Skip interval (seconds)',
+                      value: settings.skipDuration,
+                      min: 5,
+                      max: 60,
+                      onChanged: (value) => settingsController.update(settings.copyWith(skipDuration: value.roundToDouble())),
+                    ),
+                    _SliderSetting(
+                      label: 'Volume step size (%)',
+                      value: settings.volumeStep * 100.0,
+                      min: 1,
+                      max: 20,
+                      onChanged: (value) => settingsController.update(settings.copyWith(volumeStep: value.roundToDouble() / 100.0)),
                     ),
                   ],
                 ),

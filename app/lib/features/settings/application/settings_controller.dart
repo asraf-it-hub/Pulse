@@ -1,4 +1,4 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../core/theme/pulse_theme.dart';
@@ -18,6 +18,8 @@ class SettingsController extends ChangeNotifier {
       blurIntensity: prefs.getDouble('blurIntensity') ?? 18,
       animationSpeed: prefs.getDouble('animationSpeed') ?? 1,
       fontFamily: prefs.getString('fontFamily'),
+      skipDuration: prefs.getDouble('skipDuration') ?? 10,
+      volumeStep: prefs.getDouble('volumeStep') ?? 0.05,
     );
     notifyListeners();
   }
@@ -37,6 +39,8 @@ class SettingsController extends ChangeNotifier {
     } else {
       await prefs.setString('fontFamily', settings.fontFamily!);
     }
+    await prefs.setDouble('skipDuration', settings.skipDuration);
+    await prefs.setDouble('volumeStep', settings.volumeStep);
   }
 }
 

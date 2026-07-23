@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'play_pause_morph_button.dart';
+
 import '../../../services/player_engine/player_engine.dart';
 import '../application/player_controller.dart';
 
@@ -39,10 +41,10 @@ class PulseMiniPlayer extends StatelessWidget {
                         Icon(current.isVideo ? Icons.movie_rounded : Icons.music_note_rounded),
                         const SizedBox(width: 12),
                         Expanded(child: Text(current.title, maxLines: 1, overflow: TextOverflow.ellipsis)),
-                        IconButton(
-                          tooltip: snapshot.playing ? 'Pause' : 'Play',
+                        PlayPauseMorphButton(
+                          playing: snapshot.playing,
                           onPressed: playerController.togglePlay,
-                          icon: Icon(snapshot.playing ? Icons.pause_rounded : Icons.play_arrow_rounded),
+                          iconSize: 24,
                         ),
                         IconButton(
                           tooltip: 'Next',

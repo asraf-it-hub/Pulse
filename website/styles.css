@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   color-scheme: dark;
   --bg: #101114;
   --surface: rgba(255, 255, 255, 0.07);
@@ -73,18 +73,56 @@ h3 { margin-bottom: 12px; font-size: 1.15rem; }
 .player-shell { position: relative; max-width: 470px; margin-left: auto; padding: clamp(18px, 4vw, 34px); border-radius: var(--radius); transform: rotateY(-8deg) rotateX(4deg); animation: float 6s ease-in-out infinite; }
 .artwork { display: grid; place-items: center; aspect-ratio: 1; border-radius: 22px; background: linear-gradient(145deg, rgba(255, 107, 61, 0.2), rgba(85, 214, 190, 0.16)), var(--surface-strong); overflow: hidden; }
 .artwork img { width: 80%; height: 80%; object-fit: contain; filter: drop-shadow(0 24px 36px rgba(0, 0, 0, 0.32)); }
-.track-meta { display: grid; gap: 6px; margin-top: 26px; }
+.track-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 26px; }
+.meta-text { display: grid; gap: 6px; }
 .track-meta span, .download-card span, .phone-copy span { color: var(--muted); font-size: 0.86rem; }
 .track-meta strong { font-size: 1.45rem; }
+
+.equalizer { display: flex; align-items: flex-end; gap: 3px; height: 26px; width: fit-content; }
+.equalizer .bar { width: 3px; height: 100%; background: linear-gradient(to top, var(--accent), var(--accent-2)); border-radius: 999px; animation: bounce 0.8s ease-in-out infinite alternate; animation-play-state: paused; }
+.player-shell.playing .equalizer .bar { animation-play-state: running; }
+.equalizer .bar:nth-child(1) { animation-delay: 0.1s; animation-duration: 0.7s; }
+.equalizer .bar:nth-child(2) { animation-delay: 0.3s; animation-duration: 0.9s; }
+.equalizer .bar:nth-child(3) { animation-delay: 0.2s; animation-duration: 0.6s; }
+.equalizer .bar:nth-child(4) { animation-delay: 0.4s; animation-duration: 0.8s; }
+.equalizer .bar:nth-child(5) { animation-delay: 0.15s; animation-duration: 0.75s; }
+
+@keyframes bounce {
+  0% { height: 15%; }
+  100% { height: 100%; }
+}
 .progress { height: 8px; margin-top: 24px; overflow: hidden; border-radius: 999px; background: var(--surface-strong); }
-.progress span { display: block; width: 58%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--accent-2)); }
-.controls { display: flex; justify-content: center; gap: 18px; margin-top: 26px; }
-.controls span { width: 42px; height: 42px; border-radius: 50%; background: var(--surface-strong); }
-.controls .play { width: 58px; height: 58px; background: var(--text); }
+.progress span { display: block; width: 0%; height: 100%; border-radius: inherit; background: linear-gradient(90deg, var(--accent), var(--accent-2)); transition: width 0.3s linear; }
+.controls { display: flex; justify-content: center; align-items: center; gap: 18px; margin-top: 26px; }
+.controls span { width: 42px; height: 42px; border-radius: 50%; background: var(--surface-strong); cursor: pointer; display: grid; place-items: center; transition: background 0.2s, transform 0.2s; }
+.controls span:hover { background: var(--line); transform: scale(1.05); }
+.controls .play { width: 58px; height: 58px; background: var(--text); position: relative; }
+.controls .play:hover { background: #ffffff; transform: scale(1.1); }
+.controls .play::before {
+  content: '';
+  position: absolute;
+  left: 23px;
+  width: 0;
+  height: 0;
+  border-left: 16px solid var(--bg);
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  transition: all 0.2s ease;
+}
+.player-shell.playing .controls .play::before {
+  left: 20px;
+  width: 18px;
+  height: 18px;
+  border-left: 5px solid var(--bg);
+  border-right: 5px solid var(--bg);
+  border-top: none;
+  border-bottom: none;
+  background: transparent;
+}
 
 .section-heading { display: grid; gap: 0; margin-bottom: 36px; }
 .feature-grid, .download-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
-.feature-card { min-height: 240px; padding: 26px; border-radius: 22px; }
+.feature-card { min-height: 240px; padding: 26px; border-radius: 22px; transition: transform 0.1s ease, box-shadow 0.2s ease; transform-style: preserve-3d; }
 .feature-card p, .site-footer p, details p { color: var(--muted); line-height: 1.6; }
 .feature-mark { display: block; width: 38px; height: 38px; margin-bottom: 28px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), var(--accent-2)); }
 .preview-layout { display: grid; grid-template-columns: minmax(240px, 0.45fr) minmax(0, 1fr); align-items: end; gap: 24px; }
@@ -103,7 +141,8 @@ h3 { margin-bottom: 12px; font-size: 1.15rem; }
 .wide-card { min-height: 180px; background: linear-gradient(135deg, rgba(255, 107, 61, 0.24), rgba(85, 214, 190, 0.18)), var(--surface-strong); }
 .tile-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .download-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-.download-card { display: grid; gap: 10px; min-height: 180px; padding: 26px; border-radius: 22px; }
+.download-card { display: grid; gap: 10px; min-height: 180px; padding: 26px; border-radius: 22px; transition: transform 0.2s ease, background-color 0.2s ease; }
+.download-card:hover { transform: translateY(-6px) scale(1.02); background: var(--surface-strong); }
 .download-card strong { font-size: 2rem; }
 .disabled { cursor: default; }
 .split-section { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(260px, 0.7fr); gap: 34px; align-items: start; }

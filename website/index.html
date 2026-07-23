@@ -1,4 +1,4 @@
-﻿<!doctype html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -43,7 +43,19 @@
         <div class="hero-visual" aria-label="Pulse player preview">
           <div class="player-shell">
             <div class="artwork"><img src="assets/pulse-logo.png" alt="Pulse logo" /></div>
-            <div class="track-meta"><span>Now Playing</span><strong>Midnight Signal</strong></div>
+            <div class="track-meta">
+              <div class="meta-text">
+                <span>Now Playing</span>
+                <strong>Midnight Signal</strong>
+              </div>
+              <div class="equalizer">
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+                <span class="bar"></span>
+              </div>
+            </div>
             <div class="progress" aria-hidden="true"><span></span></div>
             <div class="controls" aria-hidden="true"><span></span><span class="play"></span><span></span></div>
           </div>
@@ -79,9 +91,9 @@
       <section id="downloads" class="section downloads">
         <div class="section-heading"><p class="eyebrow">Distribution</p><h2>Release channels are ready for the app builds.</h2></div>
         <div class="download-grid">
-          <a class="download-card disabled" aria-disabled="true"><span>Android</span><strong>APK</strong><small>Coming after MVP build</small></a>
-          <a class="download-card disabled" aria-disabled="true"><span>Windows</span><strong>Installer</strong><small>Coming after MVP build</small></a>
-          <a class="download-card disabled" aria-disabled="true"><span>Web</span><strong>Launch App</strong><small>Coming after web build</small></a>
+          <a class="download-card" href="assets/pulse-android.apk" download="pulse-android.apk"><span>Android</span><strong>APK</strong><small>Download Android APK</small></a>
+          <a class="download-card" href="assets/pulse-windows.zip" download="pulse-windows.zip"><span>Windows</span><strong>Release Zip</strong><small>Download Windows App</small></a>
+          <a class="download-card" href="app/index.html" target="_blank"><span>Web</span><strong>Launch App</strong><small>Run in browser</small></a>
         </div>
       </section>
 

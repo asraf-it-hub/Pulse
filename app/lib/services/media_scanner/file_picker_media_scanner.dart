@@ -1,8 +1,10 @@
-﻿import 'package:file_picker/file_picker.dart';
+import 'dart:io' as io;
+import 'package:audio_metadata_reader/audio_metadata_reader.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import '../thumbnails/video_thumbnail_service_stub.dart'
-    if (dart.library.io) '../thumbnails/video_thumbnail_service_stub.dart';
+    if (dart.library.io) '../thumbnails/video_thumbnail_service_io.dart';
 
 import '../../core/models/media_item.dart';
 import '../web/media_object_url_stub.dart'
@@ -158,17 +160,70 @@ class FilePickerMediaScanner implements MediaScanner {
 
     final kind = _isVideo(extension) ? MediaKind.video : MediaKind.audio;
     final fallbackTitle = p.basenameWithoutExtension(displayName).trim();
-    final metadata = !kind.isVideo ? _inferAudioMetadata(fallbackTitle) : null;
-    final thumbnailUri = kind == MediaKind.video ? await createVideoThumbnail(path) : null;
+
+    String title = fallbackTitle;
+    String? artist;
+    String? album;
+    String? genre;
+    Duration? duration;
+    String? thumbnailUri;
+
+    if (!kIsWeb && kind == MediaKind.audio) {
+      try {
+        final file = io.File(path);
+        final meta = readMetadata(file, getImage: true);
+        if (meta.title != null && meta.title!.trim().isNotEmpty) {
+          title = meta.title!.trim();
+        } else {
+          final inferred = _inferAudioMetadata(fallbackTitle);
+          title = inferred?.title ?? fallbackTitle;
+          artist = inferred?.artist;
+        }
+        if (meta.artist != null && meta.artist!.trim().isNotEmpty) {
+          artist = meta.artist!.trim();
+        }
+        if (meta.album != null && meta.album!.trim().isNotEmpty) {
+          album = meta.album!.trim();
+        }
+        if (meta.genres.isNotEmpty) {
+          genre = meta.genres.join(', ');
+        }
+        duration = meta.duration;
+
+        if (meta.pictures.isNotEmpty) {
+          try {
+            final artBytes = meta.pictures.first.bytes;
+            final fileName = 'pulse_art_${path.hashCode}.jpg';
+            final destFile = p.join(io.Directory.systemTemp.path, fileName);
+            final artFile = io.File(destFile);
+            await artFile.writeAsBytes(artBytes);
+            thumbnailUri = destFile;
+          } catch (_) {}
+        }
+      } catch (_) {
+        final inferred = _inferAudioMetadata(fallbackTitle);
+        title = inferred?.title ?? fallbackTitle;
+        artist = inferred?.artist;
+      }
+    } else {
+      final inferred = _inferAudioMetadata(fallbackTitle);
+      title = inferred?.title ?? fallbackTitle;
+      artist = inferred?.artist;
+    }
+
+    if (kind == MediaKind.video) {
+      thumbnailUri = await createVideoThumbnail(path);
+    }
+
     return MediaItem(
       id: path,
-      title: (metadata?.title?.trim().isNotEmpty ?? false) ? metadata!.title!.trim() : fallbackTitle,
+      title: title,
       uri: path,
       kind: kind,
-      artist: metadata?.artist,
-      album: null,
-      genre: null,
-      duration: null,
+      artist: artist,
+      album: album,
+      genre: genre,
+      duration: duration,
       addedAt: addedAt,
       folderPath: parentFolderOf(path),
       thumbnailUri: thumbnailUri,
@@ -211,10 +266,6 @@ class FilePickerMediaScanner implements MediaScanner {
   static bool _isVideo(String extension) {
     return const {'mp4', 'mkv', 'mov', 'webm', 'avi', 'm4v'}.contains(extension);
   }
-}
-
-extension on MediaKind {
-  bool get isVideo => this == MediaKind.video;
 }
 
 
