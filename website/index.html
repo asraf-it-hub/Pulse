@@ -3,116 +3,305 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="description" content="Pulse is a premium cross-platform local media player for Android, Windows, and Web." />
+    <meta name="description" content="Pulse is the ultimate local media player for Android, Windows, and Web featuring Pulse's Signature Organic Visualizer, 10-Band EQ, 200% Volume Boost, and Live Internet Radio." />
     <meta name="theme-color" content="#101114" />
-    <meta property="og:title" content="Pulse Media Player" />
-    <meta property="og:description" content="A beautiful, fast, customizable media player for your local library." />
+    <meta property="og:title" content="Pulse - Official Media Player Suite" />
+    <meta property="og:description" content="The official app provider site for Pulse. Download for Android, Windows, and Web." />
     <meta property="og:image" content="assets/pulse-logo.png" />
-    <title>Pulse - Premium Media Player</title>
+    <title>Pulse - Official Provider & Media Suite for Android, Windows & Web</title>
     <link rel="icon" href="assets/pulse-logo.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
+    <!-- Ambient Background Glows -->
+    <div class="glow-orb orb-1"></div>
+    <div class="glow-orb orb-2"></div>
+
+    <!-- Official Navigation Header -->
     <header class="site-header">
-      <a class="brand" href="#top" aria-label="Pulse home">
-        <img src="assets/pulse-logo.png" alt="" />
-        <span>Pulse</span>
+      <a class="brand" href="#top" aria-label="Pulse Home">
+        <div class="logo-box">
+          <img src="assets/pulse-logo.png" alt="Pulse Logo" />
+        </div>
+        <div class="brand-text">
+          <span class="name">PULSE</span>
+          <span class="badge">OFFICIAL</span>
+        </div>
       </a>
       <nav aria-label="Primary navigation">
         <a href="#features">Features</a>
-        <a href="#preview">Preview</a>
+        <a href="#signature">Visualizer</a>
+        <a href="#radio">Radio</a>
         <a href="#downloads">Download</a>
-        <a href="#docs">Docs</a>
+        <a href="#faq">FAQ</a>
       </nav>
-      <button class="theme-toggle" type="button" aria-label="Toggle theme">
-        <span class="theme-icon" aria-hidden="true"></span>
-      </button>
+      <div class="header-actions">
+        <a class="nav-download-btn" href="#downloads">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          Get Pulse
+        </a>
+      </div>
     </header>
 
     <main id="top">
-      <section class="hero section-band">
+      <!-- Hero Section -->
+      <section class="hero">
         <div class="hero-copy">
-          <p class="eyebrow">Local media, beautifully handled</p>
-          <h1>Pulse</h1>
-          <p class="hero-text">A premium media player for Android, Windows, and Web, designed for smooth playback, deep customization, and libraries that keep growing.</p>
+          <div class="official-pill">
+            <span class="pulse-dot"></span>
+            Official Distribution Center &bull; v2.4 Release
+          </div>
+          <h1>PULSE</h1>
+          <p class="hero-subtitle">The ultimate, ultra-responsive local media player suite for <strong>Android</strong>, <strong>Windows</strong>, and <strong>Web</strong>.</p>
+          <p class="hero-description">Experience Pulse’s signature organic radial visualizer, 200% supercharged volume booster, 10-band graphic equalizer, live internet radio, A-B segment looper, and time-synced karaoke lyrics.</p>
+          
           <div class="hero-actions">
-            <a class="button primary" href="#downloads">Get Pulse</a>
-            <a class="button ghost" href="#preview">See Preview</a>
+            <a class="button primary download-trigger" href="#downloads">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download App
+            </a>
+            <a class="button glass" href="app/index.html" target="_blank">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+              Launch Web App
+            </a>
+          </div>
+
+          <div class="hero-metrics">
+            <div class="metric"><strong>100%</strong><span>Free & Local</span></div>
+            <div class="metric-divider"></div>
+            <div class="metric"><strong>60 FPS</strong><span>Organic Halo</span></div>
+            <div class="metric-divider"></div>
+            <div class="metric"><strong>200%</strong><span>Supercharged Boost</span></div>
           </div>
         </div>
-        <div class="hero-visual" aria-label="Pulse player preview">
-          <div class="player-shell">
-            <div class="artwork"><img src="assets/pulse-logo.png" alt="Pulse logo" /></div>
-            <div class="track-meta">
-              <div class="meta-text">
-                <span>Now Playing</span>
-                <strong>Midnight Signal</strong>
-              </div>
-              <div class="equalizer">
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
-                <span class="bar"></span>
+
+        <!-- Live Interactive Player Showcase -->
+        <div class="hero-visual">
+          <div class="player-card" id="demoCard">
+            <!-- Signature Organic Visualizer Canvas -->
+            <div class="visualizer-container">
+              <canvas id="heroVisualizerCanvas" width="320" height="320"></canvas>
+              <div class="centered-artwork">
+                <img src="assets/pulse-logo.png" alt="Album Artwork" />
               </div>
             </div>
-            <div class="progress" aria-hidden="true"><span></span></div>
-            <div class="controls" aria-hidden="true"><span></span><span class="play"></span><span></span></div>
+
+            <!-- Demo Player Info -->
+            <div class="demo-meta">
+              <div class="track-info">
+                <strong id="demoTrackTitle">Midnight Cyberpunk Signal</strong>
+                <span id="demoTrackArtist">Pulse Signature Audio &bull; 24-bit FLAC</span>
+              </div>
+              <div class="status-badge" id="demoStatusBadge">READY</div>
+            </div>
+
+            <!-- Interactive Demo Controls -->
+            <div class="demo-controls">
+              <button class="control-btn" id="demoPrevBtn" title="Previous Track"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="19 20 9 12 19 4 19 20"></polygon><line x1="5" y1="19" x2="5" y2="5" stroke="currentColor" stroke-width="2"></line></svg></button>
+              <button class="control-btn play-btn" id="demoPlayBtn" title="Toggle Interactive Visualizer">
+                <svg id="playIcon" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                <svg id="pauseIcon" class="hidden" width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+              </button>
+              <button class="control-btn" id="demoNextBtn" title="Next Track"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 4 15 12 5 20 5 4"></polygon><line x1="19" y1="5" x2="19" y2="19" stroke="currentColor" stroke-width="2"></line></svg></button>
+            </div>
+
+            <!-- Supercharged Volume Booster Preview -->
+            <div class="volume-boost-preview">
+              <div class="boost-header">
+                <span>Supercharged Volume Boost</span>
+                <strong id="boostLabel">100%</strong>
+              </div>
+              <input type="range" id="boostSlider" min="0" max="200" value="100" />
+            </div>
           </div>
         </div>
       </section>
 
+      <!-- Signature Visualizer Spotlight Section -->
+      <section id="signature" class="section">
+        <div class="section-heading">
+          <p class="eyebrow">PULSE SIGNATURE IDENTITY</p>
+          <h2>An organic, real-time radial audio visualizer built like no other.</h2>
+          <p class="section-lead">Forget rigid 90s spectrum bar columns. Pulse features a smooth, fluid organic radial halo visualizer centered around your artwork that morphs dynamically with the beat.</p>
+        </div>
+        <div class="signature-grid">
+          <div class="sig-card">
+            <div class="sig-icon">🌸</div>
+            <h3>Organic Wave Deformation</h3>
+            <p>Mid frequencies smoothly deform concentric circular wave rings using Perlin-like harmonic sine waves.</p>
+          </div>
+          <div class="sig-card">
+            <div class="sig-icon">💥</div>
+            <h3>Bass Halo Bloom</h3>
+            <p>Low bass kicks expand the outer glow radius and pulse intensity in perfect synchronization with the drum rhythm.</p>
+          </div>
+          <div class="sig-card">
+            <div class="sig-icon">✨</div>
+            <h3>Orbiting Light Particles</h3>
+            <p>High treble frequencies generate 32 glowing orbiting light particles with light trails encircling the artwork.</p>
+          </div>
+          <div class="sig-card">
+            <div class="sig-icon">🎨</div>
+            <h3>Dynamic Artwork Palette</h3>
+            <p>Extracts dominant colors directly from album artwork or theme accent color to color-match halo waves.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Feature Grid Section -->
       <section id="features" class="section">
-        <div class="section-heading"><p class="eyebrow">Built for serious libraries</p><h2>Fast, elegant, and ready for every screen.</h2></div>
+        <div class="section-heading">
+          <p class="eyebrow">UNMATCHED POWER & CONTROL</p>
+          <h2>Engineered for audiophiles, cinephiles, and local media purists.</h2>
+        </div>
         <div class="feature-grid">
-          <article class="feature-card"><span class="feature-mark"></span><h3>Premium Playback</h3><p>Audio, video, subtitles, gestures, queue, resume, and mini player experiences designed to feel calm and immediate.</p></article>
-          <article class="feature-card"><span class="feature-mark"></span><h3>Adaptive Library</h3><p>Organize music, videos, albums, artists, genres, folders, favorites, history, and recent media at scale.</p></article>
-          <article class="feature-card"><span class="feature-mark"></span><h3>Theme Engine</h3><p>Light, Dark, AMOLED, Glass, Material Dynamic, Midnight, Forest, Purple, and Sunset with user-tuned motion.</p></article>
-          <article class="feature-card"><span class="feature-mark"></span><h3>Future Ready</h3><p>Clean architecture leaves room for AI search, smart summaries, cloud sync, plugins, streaming, and extensions.</p></article>
+          <div class="feature-card">
+            <div class="feature-badge">🔥 200% BOOST</div>
+            <h3>Supercharged Volume & Flame Overlay</h3>
+            <p>Drag up on video playback to boost sound up to 200% with a flame glow HUD and warm right-edge screen flare.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-badge">🎛️ 10-BAND EQ</div>
+            <h3>10-Band Equalizer & Gain Booster</h3>
+            <p>10 frequency sliders (-12dB to +12dB) with 8 preset profiles (*Bass Boost*, *Rock*, *Pop*, *Jazz*) and pre-amp gain.</p>
+          </div>
+          <div class="feature-card" id="radio">
+            <div class="feature-badge">📻 LIVE RADIO</div>
+            <h3>Live Internet Radio Station Browser</h3>
+            <p>Tune into live streams (*Lofi Girl*, *Synthwave*, *Jazz*, *Rock*, *Ambient*) or add custom HLS / Icecast URLs.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-badge">🔁 A-B LOOP</div>
+            <h3>Audio & Video A-B Segment Looper</h3>
+            <p>Set Point A and Point B timestamps to repeat any segment of a song or video continuously.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-badge">🎤 KARAOKE</div>
+            <h3>Synchronized Karaoke Lyrics (.lrc)</h3>
+            <p>Parse timestamped `.lrc` lyrics with active line auto-scrolling and tap-line-to-seek playback.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-badge">🏷️ METADATA</div>
+            <h3>Built-in ID3 Tag & Metadata Editor</h3>
+            <p>Edit track Title, Artist, Album, and Genre directly inside Pulse and persist metadata across sessions.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-badge">🖥️ OS FULLSCREEN</div>
+            <h3>True Borderless Desktop Fullscreen (`F` Key)</h3>
+            <p>Hide Windows titlebar and OS taskbar 100% for immersive cinema-grade video watching.</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-badge">🎨 THEME ENGINE</div>
+            <h3>10 Theme Presets & Color Swatches</h3>
+            <p>AMOLED Pitch Black, Cyberpunk Neon, Midnight Blue, Forest, Purple, Sunset, and 10 vibrant accent swatches.</p>
+          </div>
         </div>
       </section>
 
-      <section id="preview" class="section preview-section">
-        <div class="section-heading"><p class="eyebrow">Product direction</p><h2>A distinct identity, not another utility clone.</h2></div>
-        <div class="preview-layout">
-          <div class="phone-preview">
-            <div class="phone-top"></div>
-            <img src="assets/pulse-logo.png" alt="Pulse artwork preview" />
-            <div class="phone-copy"><span>Library</span><strong>Recently Added</strong></div>
-            <div class="list-row"></div><div class="list-row short"></div><div class="mini-player"></div>
-          </div>
-          <div class="desktop-preview">
-            <div class="window-bar"></div>
-            <div class="desktop-grid"><div class="sidebar"></div><div class="content"><div class="wide-card"></div><div class="tile-grid"><span></span><span></span><span></span><span></span></div></div></div>
-          </div>
+      <!-- Official Downloads Section -->
+      <section id="downloads" class="section downloads-section">
+        <div class="section-heading">
+          <p class="eyebrow">OFFICIAL DOWNLOAD CENTER</p>
+          <h2>Get official Pulse app releases for all your devices.</h2>
+          <p class="section-lead">Free, private, local, and ad-free. No account registration required.</p>
         </div>
-      </section>
 
-      <section id="downloads" class="section downloads">
-        <div class="section-heading"><p class="eyebrow">Distribution</p><h2>Release channels are ready for the app builds.</h2></div>
         <div class="download-grid">
-          <a class="download-card" href="assets/pulse-android.apk" download="pulse-android.apk"><span>Android</span><strong>APK</strong><small>Download Android APK</small></a>
-          <a class="download-card" href="assets/pulse-windows.zip" download="pulse-windows.zip"><span>Windows</span><strong>Release Zip</strong><small>Download Windows App</small></a>
-          <a class="download-card" href="app/index.html" target="_blank"><span>Web</span><strong>Launch App</strong><small>Run in browser</small></a>
+          <!-- Android Card -->
+          <div class="dl-card" id="dlAndroid">
+            <div class="os-icon">🤖</div>
+            <div class="os-title">
+              <h3>Android</h3>
+              <span class="os-version">v2.4 &bull; APK Package</span>
+            </div>
+            <p>For Android phones, tablets, and Android TV. Includes immersive gesture controls, lock screen notifications, and background service.</p>
+            <a class="dl-button primary" href="assets/pulse-android.apk" download="pulse-android.apk">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download Android APK
+            </a>
+          </div>
+
+          <!-- Windows Card -->
+          <div class="dl-card" id="dlWindows">
+            <div class="os-icon">🪟</div>
+            <div class="os-title">
+              <h3>Windows</h3>
+              <span class="os-version">v2.4 &bull; 64-bit Zip / Setup</span>
+            </div>
+            <p>For Windows 10 & 11 PCs. Features borderless `F`-key fullscreen, hardware acceleration, drag-and-drop, and keyboard hotkeys.</p>
+            <a class="dl-button primary" href="assets/pulse-windows.zip" download="pulse-windows.zip">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+              Download Windows App
+            </a>
+          </div>
+
+          <!-- Web App Card -->
+          <div class="dl-card" id="dlWeb">
+            <div class="os-icon">🌐</div>
+            <div class="os-title">
+              <h3>Web App</h3>
+              <span class="os-version">Online Player &bull; Any Browser</span>
+            </div>
+            <p>Run Pulse directly in Chrome, Edge, Safari, or Firefox without installing anything. Full audio and local media support.</p>
+            <a class="dl-button glass" href="app/index.html" target="_blank">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"></circle><polygon points="10 8 16 12 10 16 10 8"></polygon></svg>
+              Launch Online Web Player
+            </a>
+          </div>
         </div>
       </section>
 
-      <section id="docs" class="section split-section">
-        <div><p class="eyebrow">Documentation</p><h2>Clear public pages from day one.</h2></div>
-        <div class="link-list">
-          <a href="../docs/brand.md">Brand Guide</a><a href="../docs/changelog.md">Changelog</a><a href="../docs/release-strategy.md">Release Strategy</a><a href="privacy.html">Privacy Policy</a><a href="terms.html">Terms</a>
+      <!-- FAQ Section -->
+      <section id="faq" class="section faq-section">
+        <div class="section-heading">
+          <p class="eyebrow">FREQUENTLY ASKED QUESTIONS</p>
+          <h2>Everything you need to know about Pulse.</h2>
         </div>
-      </section>
-
-      <section class="section faq">
-        <div class="section-heading"><p class="eyebrow">FAQ</p><h2>What Pulse is becoming.</h2></div>
-        <details open><summary>Which platforms will Pulse support?</summary><p>Android, Windows, and Web first. The architecture will keep macOS and Linux viable later.</p></details>
-        <details><summary>Will Pulse stream from cloud services?</summary><p>Not in the first release. The foundation will make cloud sync, accounts, plugins, and streaming possible later.</p></details>
-        <details><summary>Is Pulse open for testing yet?</summary><p>The distribution site is ready. App builds will appear here after the Flutter MVP reaches release quality.</p></details>
+        <div class="faq-container">
+          <details open>
+            <summary>Is Pulse completely free and private?</summary>
+            <p>Yes! Pulse is 100% free, private, and offline-first. Your local media library stays strictly on your device and is never uploaded anywhere.</p>
+          </details>
+          <details>
+            <summary>How do I install the Android APK?</summary>
+            <p>Download `pulse-android.apk` from this official website, tap the file in your downloads folder, and allow "Install from Unknown Sources" when prompted.</p>
+          </details>
+          <details>
+            <summary>How do I run Pulse on Windows?</summary>
+            <p>Download `pulse-windows.zip`, extract it to any folder on your PC, and double click `pulse.exe` to start playing.</p>
+          </details>
+          <details>
+            <summary>What audio and video formats are supported?</summary>
+            <p>MP3, FLAC, WAV, AAC, M4A, OGG, MP4, MKV, AVI, WebM, and TS streams with subtitle (`.srt`, `.vtt`) and multi-audio track support.</p>
+          </details>
+        </div>
       </section>
     </main>
 
-    <footer class="site-footer"><div><strong>Pulse</strong><p>Premium local media player for Android, Windows, and Web.</p></div><div class="footer-links"><a href="mailto:hello@example.com">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a></div></footer>
+    <!-- Official Footer -->
+    <footer class="site-footer">
+      <div class="footer-left">
+        <div class="brand">
+          <div class="logo-box">
+            <img src="assets/pulse-logo.png" alt="Pulse Logo" />
+          </div>
+          <div class="brand-text">
+            <span class="name">PULSE</span>
+          </div>
+        </div>
+        <p>The Official App Provider Website for Pulse Media Suite across Android, Windows, and Web.</p>
+      </div>
+      <div class="footer-links">
+        <a href="privacy.html">Privacy Policy</a>
+        <a href="terms.html">Terms of Service</a>
+        <a href="../docs/brand.md">Brand Guide</a>
+        <a href="../docs/changelog.md">Changelog</a>
+      </div>
+    </footer>
+
     <script src="script.js"></script>
   </body>
 </html>
