@@ -13,5 +13,3 @@ coverage/
 .pulse-git/
 gitmeta/
 website/probe.txt
-website/assets/*.apk
-website/assets/*.zip
