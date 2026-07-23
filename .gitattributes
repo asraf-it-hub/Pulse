@@ -1,0 +1,2 @@
+website/assets/*.apk filter=lfs diff=lfs merge=lfs -text
+website/assets/*.zip filter=lfs diff=lfs merge=lfs -text
